@@ -28,7 +28,7 @@ private val BackgroundBeige = Color(0xFFF5EBEB)
 private val SelectedItemBg = Color(0xFFFFDBCF) // Color salmón suave de la imagen
 
 @Composable
-fun TitleScreen() {
+fun TitleScreen(onNavigate: (String) -> Unit = {}) {
     // Estado para controlar el Drawer
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -41,18 +41,26 @@ fun TitleScreen() {
                 drawerShape = RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp),
                 modifier = Modifier.width(320.dp)
             ) {
-                DrawerContent()
+                DrawerContent(
+                    onItemClick = { route ->
+                        scope.launch { drawerState.close() }
+                        onNavigate(route)
+                    }
+                )
             }
         }
     ) {
         Scaffold(
             topBar = { 
-                TitleTopBar(onMenuClick = {
-                    // Abrimos el drawer de forma asíncrona
-                    scope.launch { drawerState.open() }
-                }) 
+                TitleTopBar(
+                    onMenuClick = {
+                        // Abrimos el drawer de forma asíncrona
+                        scope.launch { drawerState.open() }
+                    },
+                    onProfileClick = { onNavigate("profile") }
+                ) 
             },
-            bottomBar = { TitleBottomBar() },
+            bottomBar = { TitleBottomBar(onNavigate = onNavigate) },
             floatingActionButton = { CentralFAB() },
             floatingActionButtonPosition = FabPosition.Center,
         ) { innerPadding ->
@@ -63,7 +71,7 @@ fun TitleScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TitleTopBar(onMenuClick: () -> Unit) {
+fun TitleTopBar(onMenuClick: () -> Unit, onProfileClick: () -> Unit) {
     CenterAlignedTopAppBar(
         title = {
             Text(
@@ -79,7 +87,7 @@ fun TitleTopBar(onMenuClick: () -> Unit) {
             }
         },
         actions = {
-            IconButton(onClick = { /* TODO */ }) {
+            IconButton(onClick = onProfileClick) {
                 Icon(Icons.Default.AccountCircle, contentDescription = "Profile", tint = TextDark)
             }
         },
@@ -90,7 +98,7 @@ fun TitleTopBar(onMenuClick: () -> Unit) {
 }
 
 @Composable
-fun DrawerContent() {
+fun DrawerContent(onItemClick: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -116,26 +124,30 @@ fun DrawerContent() {
         DrawerItem(
             icon = Icons.AutoMirrored.Filled.List,
             label = "Shop list",
-            isSelected = true
+            isSelected = true,
+            onClick = { onItemClick("title") }
         )
         
         DrawerItem(
             icon = Icons.Default.Favorite,
             label = "Favourites",
             isSelected = false,
-            badge = "3"
+            badge = "3",
+            onClick = { /* TODO */ }
         )
         
         DrawerItem(
             icon = Icons.Default.Person,
             label = "Profile",
-            isSelected = false
+            isSelected = false,
+            onClick = { onItemClick("profile") }
         )
         
         DrawerItem(
             icon = Icons.Default.Settings,
             label = "Settings",
-            isSelected = false
+            isSelected = false,
+            onClick = { /* TODO */ }
         )
     }
 }
@@ -145,9 +157,11 @@ fun DrawerItem(
     icon: ImageVector,
     label: String,
     isSelected: Boolean,
-    badge: String? = null
+    badge: String? = null,
+    onClick: () -> Unit = {}
 ) {
     Surface(
+        onClick = onClick,
         color = if (isSelected) SelectedItemBg else Color.Transparent,
         shape = RoundedCornerShape(32.dp),
         modifier = Modifier
@@ -185,9 +199,8 @@ fun DrawerItem(
     }
 }
 
-// Los demás componentes (BottomBar, FAB, Content) se mantienen igual
 @Composable
-fun TitleBottomBar() {
+fun TitleBottomBar(onNavigate: (String) -> Unit = {}) {
     Surface(
         color = Color.White,
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
@@ -201,24 +214,31 @@ fun TitleBottomBar() {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BottomNavItem(Icons.Default.Home, "Product", isSelected = true)
-            BottomNavItem(Icons.Default.Search, "Search", isSelected = false)
+            BottomNavItem(Icons.Default.Home, "Product", isSelected = true, onClick = { onNavigate("title") })
+            BottomNavItem(Icons.Default.Search, "Search", isSelected = false, onClick = { /* TODO */ })
             Box(modifier = Modifier.size(60.dp))
-            BottomNavItem(Icons.Default.ShoppingCart, "Cart", isSelected = false)
-            BottomNavItem(Icons.Default.Person, "Profile", isSelected = false)
+            BottomNavItem(Icons.Default.ShoppingCart, "Cart", isSelected = false, onClick = { /* TODO */ })
+            BottomNavItem(Icons.Default.Person, "Profile", isSelected = false, onClick = { onNavigate("profile") })
         }
     }
 }
 
 @Composable
-fun BottomNavItem(icon: ImageVector, label: String, isSelected: Boolean) {
+fun BottomNavItem(
+    icon: ImageVector,
+    label: String,
+    isSelected: Boolean,
+    onClick: () -> Unit = {}
+) {
     val color = if (isSelected) PrimaryBrown else Color.Gray
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.padding(top = 8.dp)
     ) {
-        Icon(icon, contentDescription = label, tint = color, modifier = Modifier.size(26.dp))
+        IconButton(onClick = onClick) {
+            Icon(icon, contentDescription = label, tint = color, modifier = Modifier.size(26.dp))
+        }
         Text(text = label, fontSize = 11.sp, color = color)
     }
 }

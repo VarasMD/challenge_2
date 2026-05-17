@@ -1,0 +1,254 @@
+package com.example.challenge2.ui.screen
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.challenge2.ui.theme.Challenge2Theme
+
+// Colores del diseño
+private val PrimaryBrown = Color(0xFF8D3B1E)
+private val TextDark = Color(0xFF423430)
+private val BackgroundBeige = Color(0xFFF5EBEB)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileScreen(onBack: () -> Unit = {}, onNavigate: (String) -> Unit = {}) {
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Profile",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = TextDark
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = TextDark
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { /* TODO */ }) {
+                        Icon(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentDescription = "Account",
+                            tint = TextDark,
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.White
+                )
+            )
+        },
+        bottomBar = { ProfileBottomBar(onNavigate) },
+        floatingActionButton = { ProfileCentralFAB() },
+        floatingActionButtonPosition = FabPosition.Center
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .background(BackgroundBeige)
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Profile Image Area
+            Box(contentAlignment = Alignment.BottomEnd) {
+                // Main Circle
+                Box(
+                    modifier = Modifier
+                        .size(140.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFFD9D9D9))
+                )
+                
+                // Edit Button (Orange Circle)
+                Surface(
+                    onClick = { /* TODO */ },
+                    shape = CircleShape,
+                    color = Color(0xFFF09030),
+                    modifier = Modifier
+                        .size(36.dp)
+                        .offset(x = (-4).dp, y = (-4).dp)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit Profile",
+                            tint = Color.White,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Name and Role
+            Text(
+                text = "Martin",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextDark
+            )
+            Text(
+                text = "UI UX DESIGN",
+                fontSize = 14.sp,
+                color = Color.Gray.copy(alpha = 0.6f),
+                letterSpacing = 1.sp
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Information Fields
+            ProfileField(
+                label = "E-Mail Address",
+                value = "xxx@gmail.com",
+                icon = Icons.Outlined.Email
+            )
+            ProfileField(
+                label = "Phone Number",
+                value = "+5493123135",
+                icon = Icons.Outlined.Phone
+            )
+            ProfileField(
+                label = "Web Site",
+                value = "www.google.com",
+                icon = Icons.Outlined.Settings
+            )
+            ProfileField(
+                label = "Password",
+                value = "xxxxxxxxxxxxxx",
+                icon = Icons.Outlined.Lock
+            )
+        }
+    }
+}
+
+@Composable
+fun ProfileField(
+    label: String,
+    value: String,
+    icon: ImageVector
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = {},
+        label = { Text(label, fontSize = 14.sp) },
+        readOnly = true,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp),
+        trailingIcon = {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.Gray.copy(alpha = 0.6f),
+                modifier = Modifier.size(24.dp)
+            )
+        },
+        shape = RoundedCornerShape(8.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = Color.Gray.copy(alpha = 0.4f),
+            focusedBorderColor = PrimaryBrown,
+            unfocusedLabelColor = Color.Gray.copy(alpha = 0.7f),
+            focusedLabelColor = PrimaryBrown,
+            unfocusedTextColor = Color.Gray.copy(alpha = 0.7f)
+        )
+    )
+}
+
+@Composable
+fun ProfileBottomBar(onNavigate: (String) -> Unit) {
+    Surface(
+        color = Color.White,
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        shadowElevation = 8.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(bottom = 8.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ProfileBottomNavItem(Icons.Default.Home, "Product", isSelected = false) { onNavigate("title") }
+            ProfileBottomNavItem(Icons.Default.Search, "Search", isSelected = false) {}
+            Box(modifier = Modifier.size(60.dp))
+            ProfileBottomNavItem(Icons.Default.ShoppingCart, "Cart", isSelected = false) {}
+            ProfileBottomNavItem(Icons.Default.Person, "Profile", isSelected = true) {}
+        }
+    }
+}
+
+@Composable
+fun ProfileBottomNavItem(icon: ImageVector, label: String, isSelected: Boolean, onClick: () -> Unit) {
+    val color = if (isSelected) PrimaryBrown else Color.Gray
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.padding(top = 8.dp)
+    ) {
+        IconButton(onClick = onClick) {
+            Icon(icon, contentDescription = label, tint = color, modifier = Modifier.size(26.dp))
+        }
+        Text(text = label, fontSize = 11.sp, color = color, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal)
+    }
+}
+
+@Composable
+fun ProfileCentralFAB() {
+    FloatingActionButton(
+        onClick = { /* TODO */ },
+        shape = CircleShape,
+        containerColor = PrimaryBrown,
+        contentColor = Color.White,
+        elevation = FloatingActionButtonDefaults.elevation(4.dp),
+        modifier = Modifier.size(72.dp).offset(y = 50.dp)
+    ) {
+        Icon(Icons.Default.Home, contentDescription = "Shop", modifier = Modifier.size(32.dp))
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProfileScreenPreview() {
+    Challenge2Theme {
+        ProfileScreen()
+    }
+}
