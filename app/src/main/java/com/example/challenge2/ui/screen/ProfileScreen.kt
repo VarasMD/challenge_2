@@ -2,8 +2,10 @@ package com.example.challenge2.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
@@ -23,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -81,22 +84,22 @@ fun ProfileScreen(onBack: () -> Unit = {}, onNavigate: (String) -> Unit = {}) {
                 .fillMaxSize()
                 .padding(innerPadding)
                 .background(BackgroundBeige)
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Profile Image Area
+            // Profile Image Area (139 x 139)
             Box(contentAlignment = Alignment.BottomEnd) {
-                // Main Circle
                 Box(
                     modifier = Modifier
-                        .size(140.dp)
+                        .size(139.dp)
                         .clip(CircleShape)
                         .background(Color(0xFFD9D9D9))
                 )
                 
-                // Edit Button (Orange Circle)
+                // Edit Button
                 Surface(
                     onClick = { /* TODO */ },
                     shape = CircleShape,
@@ -116,23 +119,31 @@ fun ProfileScreen(onBack: () -> Unit = {}, onNavigate: (String) -> Unit = {}) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            // Espacio de 18px entre foto y nombre
+            Spacer(modifier = Modifier.height(18.dp))
 
-            // Name and Role
+            // Name - 20sp, SemiBold
             Text(
                 text = "Martin",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
                 color = TextDark
             )
+            
+            // Espacio de 8dp entre nombre y rol
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            // Role - 14sp, Regular (Weight 400)
             Text(
                 text = "UI UX DESIGN",
                 fontSize = 14.sp,
+                fontWeight = FontWeight.W400,
                 color = Color.Gray.copy(alpha = 0.6f),
                 letterSpacing = 1.sp
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            // Espacio de 59dp entre el rol y el primer input
+            Spacer(modifier = Modifier.height(59.dp))
 
             // Information Fields
             ProfileField(
@@ -140,21 +151,36 @@ fun ProfileScreen(onBack: () -> Unit = {}, onNavigate: (String) -> Unit = {}) {
                 value = "xxx@gmail.com",
                 icon = Icons.Outlined.Email
             )
+            
+            // Espacio de 40dp entre inputs
+            Spacer(modifier = Modifier.height(40.dp))
+            
             ProfileField(
                 label = "Phone Number",
                 value = "+5493123135",
                 icon = Icons.Outlined.Phone
             )
+            
+            // Espacio de 40dp entre inputs
+            Spacer(modifier = Modifier.height(40.dp))
+            
             ProfileField(
                 label = "Web Site",
                 value = "www.google.com",
                 icon = Icons.Outlined.Settings
             )
+            
+            // Espacio de 40dp entre inputs
+            Spacer(modifier = Modifier.height(40.dp))
+
             ProfileField(
                 label = "Password",
                 value = "xxxxxxxxxxxxxx",
                 icon = Icons.Outlined.Lock
             )
+            
+            // Espacio extra al final para permitir scroll completo sobre el FAB
+            Spacer(modifier = Modifier.height(120.dp))
         }
     }
 }
@@ -170,9 +196,13 @@ fun ProfileField(
         onValueChange = {},
         label = { Text(label, fontSize = 14.sp) },
         readOnly = true,
+        textStyle = TextStyle(
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium // Weight 500
+        ),
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp),
+            .width(364.dp)
+            .height(56.dp),
         trailingIcon = {
             Icon(
                 imageVector = icon,
