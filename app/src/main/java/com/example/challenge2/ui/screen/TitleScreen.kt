@@ -13,12 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.challenge2.ui.components.AppBottomBar
 import com.example.challenge2.ui.components.CentralFAB
+import com.example.challenge2.ui.components.TopBarComponent
 import com.example.challenge2.ui.theme.BackgroundBeige
 import com.example.challenge2.ui.theme.Challenge2Theme
 import com.example.challenge2.ui.theme.SelectedItemBg
@@ -49,12 +51,19 @@ fun TitleScreen(onNavigate: (String) -> Unit = {}) {
     ) {
         Scaffold(
             topBar = { 
-                TitleTopBar(
-                    onMenuClick = {
+                TopBarComponent(
+                    title = "TITLE",
+                    navigationIcon = Icons.Default.Menu,
+                    onNavigationClick = {
                         scope.launch { drawerState.open() }
                     },
-                    onProfileClick = { onNavigate("profile") }
-                ) 
+                    onActionClick = { onNavigate("profile") },
+                    titleStyle = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 2.sp,
+                        fontSize = 20.sp
+                    )
+                )
             },
             bottomBar = { AppBottomBar(currentRoute = "title", onNavigate = onNavigate) },
             floatingActionButton = { CentralFAB { /* TODO */ } },
@@ -63,35 +72,6 @@ fun TitleScreen(onNavigate: (String) -> Unit = {}) {
             MainContent(modifier = Modifier.padding(innerPadding))
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TitleTopBar(onMenuClick: () -> Unit, onProfileClick: () -> Unit) {
-    CenterAlignedTopAppBar(
-        modifier = Modifier.height(64.dp),
-        title = {
-            Text(
-                "TITLE",
-                fontWeight = FontWeight.Bold,
-                color = TextDark,
-                letterSpacing = 2.sp
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = onMenuClick) {
-                Icon(Icons.Default.Menu, contentDescription = "Menu", tint = TextDark)
-            }
-        },
-        actions = {
-            IconButton(onClick = onProfileClick) {
-                Icon(Icons.Default.AccountCircle, contentDescription = "Profile", tint = TextDark)
-            }
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color.White
-        )
-    )
 }
 
 @Composable

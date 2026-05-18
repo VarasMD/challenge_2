@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.challenge2.ui.components.AppBottomBar
 import com.example.challenge2.ui.components.CentralFAB
+import com.example.challenge2.ui.components.TopBarComponent
 import com.example.challenge2.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,38 +36,11 @@ import com.example.challenge2.ui.theme.*
 fun ProfileScreen(onBack: () -> Unit = {}, onNavigate: (String) -> Unit = {}) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                modifier = Modifier.height(64.dp),
-                title = {
-                    Text(
-                        "Profile",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = TextDark
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = TextDark
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { /* TODO */ }) {
-                        Icon(
-                            imageVector = Icons.Default.AccountCircle,
-                            contentDescription = "Account",
-                            tint = TextDark,
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White
-                )
+            TopBarComponent(
+                title = "Profile",
+                navigationIcon = Icons.AutoMirrored.Filled.ArrowBack,
+                onNavigationClick = onBack,
+                onActionClick = { /* TODO */ }
             )
         },
         bottomBar = { AppBottomBar(currentRoute = "profile", onNavigate = onNavigate) },
