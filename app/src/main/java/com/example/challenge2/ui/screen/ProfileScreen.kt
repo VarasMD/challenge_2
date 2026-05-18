@@ -1,8 +1,6 @@
 package com.example.challenge2.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -12,17 +10,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,12 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.challenge2.ui.theme.Challenge2Theme
-
-// Colores del diseño
-private val PrimaryBrown = Color(0xFF8D3B1E)
-private val TextDark = Color(0xFF423430)
-private val BackgroundBeige = Color(0xFFF5EBEB)
+import com.example.challenge2.ui.components.AppBottomBar
+import com.example.challenge2.ui.components.CentralFAB
+import com.example.challenge2.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +36,7 @@ fun ProfileScreen(onBack: () -> Unit = {}, onNavigate: (String) -> Unit = {}) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
+                modifier = Modifier.height(64.dp),
                 title = {
                     Text(
                         "Profile",
@@ -78,8 +69,8 @@ fun ProfileScreen(onBack: () -> Unit = {}, onNavigate: (String) -> Unit = {}) {
                 )
             )
         },
-        bottomBar = { ProfileBottomBar(onNavigate) },
-        floatingActionButton = { ProfileCentralFAB() },
+        bottomBar = { AppBottomBar(currentRoute = "profile", onNavigate = onNavigate) },
+        floatingActionButton = { CentralFAB { /* TODO */ } },
         floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         Column(
@@ -99,14 +90,14 @@ fun ProfileScreen(onBack: () -> Unit = {}, onNavigate: (String) -> Unit = {}) {
                     modifier = Modifier
                         .size(139.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFFD9D9D9))
+                        .background(PlaceholderGray)
                 )
                 
                 // Edit Button
                 Surface(
                     onClick = { /* TODO */ },
                     shape = CircleShape,
-                    color = Color(0xFFF09030),
+                    color = OrangeEdit,
                     modifier = Modifier
                         .size(36.dp)
                         .offset(x = (-4).dp, y = (-4).dp)
@@ -223,72 +214,6 @@ fun ProfileField(
             unfocusedTextColor = Color.Gray.copy(alpha = 0.7f)
         )
     )
-}
-
-@Composable
-fun ProfileBottomBar(onNavigate: (String) -> Unit) {
-    Surface(
-        color = Color.White,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        shadowElevation = 8.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(68.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            ProfileBottomNavItem(Icons.Default.Home, "Product", isSelected = false) { onNavigate("title") }
-            ProfileBottomNavItem(Icons.Default.Search, "Search", isSelected = false) {}
-            Box(modifier = Modifier.size(60.dp))
-            ProfileBottomNavItem(Icons.Default.ShoppingCart, "Cart", isSelected = false) {}
-            ProfileBottomNavItem(Icons.Default.Person, "Profile", isSelected = true) {}
-        }
-    }
-}
-
-@Composable
-fun ProfileBottomNavItem(icon: ImageVector, label: String, isSelected: Boolean, onClick: () -> Unit) {
-    val color = if (isSelected) PrimaryBrown else Color.Gray
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onClick
-            )
-    ) {
-        Icon(
-            imageVector = icon, 
-            contentDescription = label, 
-            tint = color, 
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.height(9.dp))
-        Text(
-            text = label, 
-            fontSize = 11.sp, 
-            color = color, 
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-        )
-    }
-}
-
-@Composable
-fun ProfileCentralFAB() {
-    FloatingActionButton(
-        onClick = { /* TODO */ },
-        shape = CircleShape,
-        containerColor = PrimaryBrown,
-        contentColor = Color.White,
-        elevation = FloatingActionButtonDefaults.elevation(4.dp),
-        modifier = Modifier.size(72.dp).offset(y = 50.dp)
-    ) {
-        Icon(Icons.Default.Home, contentDescription = "Shop", modifier = Modifier.size(32.dp))
-    }
 }
 
 @Preview(showBackground = true)

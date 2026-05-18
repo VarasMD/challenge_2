@@ -1,17 +1,13 @@
 package com.example.challenge2.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,18 +17,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.challenge2.ui.components.AppBottomBar
+import com.example.challenge2.ui.components.CentralFAB
+import com.example.challenge2.ui.theme.BackgroundBeige
 import com.example.challenge2.ui.theme.Challenge2Theme
+import com.example.challenge2.ui.theme.SelectedItemBg
+import com.example.challenge2.ui.theme.TextDark
 import kotlinx.coroutines.launch
-
-// Colores del diseño
-private val PrimaryBrown = Color(0xFF8D3B1E)
-private val TextDark = Color(0xFF423430)
-private val BackgroundBeige = Color(0xFFF5EBEB)
-private val SelectedItemBg = Color(0xFFFFDBCF) // Color salmón suave de la imagen
 
 @Composable
 fun TitleScreen(onNavigate: (String) -> Unit = {}) {
-    // Estado para controlar el Drawer
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -57,14 +51,13 @@ fun TitleScreen(onNavigate: (String) -> Unit = {}) {
             topBar = { 
                 TitleTopBar(
                     onMenuClick = {
-                        // Abrimos el drawer de forma asíncrona
                         scope.launch { drawerState.open() }
                     },
                     onProfileClick = { onNavigate("profile") }
                 ) 
             },
-            bottomBar = { TitleBottomBar(onNavigate = onNavigate) },
-            floatingActionButton = { CentralFAB() },
+            bottomBar = { AppBottomBar(currentRoute = "title", onNavigate = onNavigate) },
+            floatingActionButton = { CentralFAB { /* TODO */ } },
             floatingActionButtonPosition = FabPosition.Center,
         ) { innerPadding ->
             MainContent(modifier = Modifier.padding(innerPadding))
@@ -124,7 +117,6 @@ fun DrawerContent(onItemClick: (String) -> Unit) {
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        // Lista de opciones del Drawer
         DrawerItem(
             icon = Icons.AutoMirrored.Filled.List,
             label = "Shop list",
@@ -200,73 +192,6 @@ fun DrawerItem(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun TitleBottomBar(onNavigate: (String) -> Unit = {}) {
-    Surface(
-        color = Color.White,
-        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
-        shadowElevation = 8.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(68.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BottomNavItem(Icons.Default.Home, "Product", isSelected = true, onClick = { onNavigate("title") })
-            BottomNavItem(Icons.Default.Search, "Search", isSelected = false, onClick = { /* TODO */ })
-            Box(modifier = Modifier.size(60.dp))
-            BottomNavItem(Icons.Default.ShoppingCart, "Cart", isSelected = false, onClick = { /* TODO */ })
-            BottomNavItem(Icons.Default.Person, "Profile", isSelected = false, onClick = { onNavigate("profile") })
-        }
-    }
-}
-
-@Composable
-fun BottomNavItem(
-    icon: ImageVector,
-    label: String,
-    isSelected: Boolean,
-    onClick: () -> Unit = {}
-) {
-    val color = if (isSelected) PrimaryBrown else Color.Gray
-    val interactionSource = remember { MutableInteractionSource() }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick
-            )
-    ) {
-        Icon(
-            imageVector = icon, 
-            contentDescription = label, 
-            tint = color, 
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.height(9.dp))
-        Text(text = label, fontSize = 11.sp, color = color)
-    }
-}
-
-@Composable
-fun CentralFAB() {
-    FloatingActionButton(
-        onClick = { /* TODO */ },
-        shape = CircleShape,
-        containerColor = PrimaryBrown,
-        contentColor = Color.White,
-        elevation = FloatingActionButtonDefaults.elevation(4.dp),
-        modifier = Modifier.size(72.dp).offset(y = 50.dp)
-    ) {
-        Icon(Icons.Default.Home, contentDescription = "Shop", modifier = Modifier.size(32.dp))
     }
 }
 
