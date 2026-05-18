@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.challenge2.ui.screen.ProfileScreen
+import com.example.challenge2.ui.screen.SettingsScreen
 import com.example.challenge2.ui.screen.TitleScreen
 import com.example.challenge2.ui.theme.Challenge2Theme
 
@@ -43,6 +44,18 @@ fun AppNavigation() {
                         navController.popBackStack("title", inclusive = false)
                     } else {
                         navController.navigate(route)
+                    }
+                }
+            )
+        }
+        composable("settings") {
+            SettingsScreen(
+                onMenuClick = { /* Drawer is usually on TitleScreen, but if needed we can handle here */ },
+                onNavigate = { route ->
+                    navController.navigate(route) {
+                        popUpTo("title") { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
                     }
                 }
             )

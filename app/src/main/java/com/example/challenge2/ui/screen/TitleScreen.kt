@@ -123,7 +123,7 @@ fun DrawerContent(onItemClick: (String) -> Unit) {
             icon = Icons.Default.Settings,
             label = "Settings",
             isSelected = false,
-            onClick = { /* TODO */ }
+            onClick = { onItemClick("settings") }
         )
     }
 }
