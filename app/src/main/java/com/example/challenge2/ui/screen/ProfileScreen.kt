@@ -1,6 +1,8 @@
 package com.example.challenge2.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -232,8 +235,7 @@ fun ProfileBottomBar(onNavigate: (String) -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
-                .padding(bottom = 8.dp),
+                .height(68.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -252,12 +254,26 @@ fun ProfileBottomNavItem(icon: ImageVector, label: String, isSelected: Boolean, 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(top = 8.dp)
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            )
     ) {
-        IconButton(onClick = onClick) {
-            Icon(icon, contentDescription = label, tint = color, modifier = Modifier.size(26.dp))
-        }
-        Text(text = label, fontSize = 11.sp, color = color, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal)
+        Icon(
+            imageVector = icon, 
+            contentDescription = label, 
+            tint = color, 
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.height(9.dp))
+        Text(
+            text = label, 
+            fontSize = 11.sp, 
+            color = color, 
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+        )
     }
 }
 

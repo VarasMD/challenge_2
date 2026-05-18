@@ -1,6 +1,8 @@
 package com.example.challenge2.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,6 +11,7 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -73,6 +76,7 @@ fun TitleScreen(onNavigate: (String) -> Unit = {}) {
 @Composable
 fun TitleTopBar(onMenuClick: () -> Unit, onProfileClick: () -> Unit) {
     CenterAlignedTopAppBar(
+        modifier = Modifier.height(64.dp),
         title = {
             Text(
                 "TITLE",
@@ -209,8 +213,7 @@ fun TitleBottomBar(onNavigate: (String) -> Unit = {}) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
-                .padding(bottom = 8.dp),
+                .height(68.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -231,14 +234,24 @@ fun BottomNavItem(
     onClick: () -> Unit = {}
 ) {
     val color = if (isSelected) PrimaryBrown else Color.Gray
+    val interactionSource = remember { MutableInteractionSource() }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(top = 8.dp)
+        modifier = Modifier
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
     ) {
-        IconButton(onClick = onClick) {
-            Icon(icon, contentDescription = label, tint = color, modifier = Modifier.size(26.dp))
-        }
+        Icon(
+            imageVector = icon, 
+            contentDescription = label, 
+            tint = color, 
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.height(9.dp))
         Text(text = label, fontSize = 11.sp, color = color)
     }
 }
