@@ -43,8 +43,8 @@ fun DrawerContent(currentRoute: String, onItemClick: (String) -> Unit) {
         DrawerItem(
             icon = Icons.AutoMirrored.Filled.List,
             label = "Shop list",
-            isSelected = currentRoute == "title",
-            onClick = { onItemClick("title") }
+            isSelected = currentRoute == "shop_list",
+            onClick = { onItemClick("shop_list") }
         )
         
         DrawerItem(
