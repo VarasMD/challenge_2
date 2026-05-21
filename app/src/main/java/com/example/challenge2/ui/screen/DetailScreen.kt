@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.challenge2.ui.components.AppBottomBar
+import com.example.challenge2.ui.components.CentralFAB
 import com.example.challenge2.ui.components.TopBarComponent
 import com.example.challenge2.ui.theme.BackgroundBeige
 import com.example.challenge2.ui.theme.Challenge2Theme
@@ -34,7 +35,9 @@ fun DetailScreen(onMenuClick: () -> Unit, onBack: () -> Unit, onNavigate: (Strin
                 onActionClick = { onNavigate("profile") }
             )
         },
-        bottomBar = { AppBottomBar(currentRoute = "title", onNavigate = onNavigate) }
+        bottomBar = { AppBottomBar(currentRoute = "title", onNavigate = onNavigate) },
+        floatingActionButton = { CentralFAB { onNavigate("title") } },
+        floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         Column(
             modifier = Modifier

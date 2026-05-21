@@ -42,7 +42,7 @@ fun AppBottomBar(
             BottomNavItem(
                 icon = Icons.Default.Home,
                 label = "Product",
-                isSelected = currentRoute == "title",
+                isSelected = currentRoute == "title" || currentRoute == "shop_list" || currentRoute == "detail",
                 onClick = { onNavigate("title") }
             )
             BottomNavItem(
@@ -108,19 +108,22 @@ fun BottomNavItem(
 
 @Composable
 fun CentralFAB(onClick: () -> Unit = {}) {
+    // Para que el FAB sea visible y solape correctamente, ajustamos el offset.
+    // En M3 Scaffold, el FAB se posiciona justo encima de la bottomBar.
+    // Un offset positivo moderado lo bajará para que se integre visualmente.
     FloatingActionButton(
         onClick = onClick,
         shape = CircleShape,
         containerColor = PrimaryBrown,
         contentColor = Color.White,
-        elevation = FloatingActionButtonDefaults.elevation(4.dp),
+        elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 12.dp),
         modifier = Modifier
             .size(72.dp)
-            .offset(y = 50.dp)
+            .offset(y = 36.dp) 
     ) {
         Icon(
             imageVector = Icons.Default.Home,
-            contentDescription = "Main Shop",
+            contentDescription = "Home",
             modifier = Modifier.size(32.dp)
         )
     }
