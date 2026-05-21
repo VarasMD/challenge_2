@@ -15,11 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.challenge2.ui.components.DrawerContent
-import com.example.challenge2.ui.screen.FavouriteScreen
-import com.example.challenge2.ui.screen.ProfileScreen
-import com.example.challenge2.ui.screen.SettingsScreen
-import com.example.challenge2.ui.screen.ShopListScreen
-import com.example.challenge2.ui.screen.TitleScreen
+import com.example.challenge2.ui.screen.*
 import com.example.challenge2.ui.theme.BackgroundBeige
 import com.example.challenge2.ui.theme.Challenge2Theme
 import kotlinx.coroutines.launch
@@ -108,6 +104,15 @@ fun AppNavigation() {
             composable("favourite") {
                 FavouriteScreen(
                     onMenuClick = { scope.launch { drawerState.open() } },
+                    onNavigate = { route ->
+                        navController.navigate(route)
+                    }
+                )
+            }
+            composable("detail") {
+                DetailScreen(
+                    onMenuClick = { scope.launch { drawerState.open() } },
+                    onBack = { navController.popBackStack() },
                     onNavigate = { route ->
                         navController.navigate(route)
                     }

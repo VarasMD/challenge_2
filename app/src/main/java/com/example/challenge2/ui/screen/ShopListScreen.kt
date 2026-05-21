@@ -3,6 +3,7 @@ package com.example.challenge2.ui.screen
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -59,7 +60,7 @@ fun ShopListScreen(onMenuClick: () -> Unit, onNavigate: (String) -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 items(shopItems) {
-                    ShopItemCard()
+                    ShopItemCard(onClick = { onNavigate("detail") })
                 }
                 item {
                     Spacer(modifier = Modifier.height(80.dp))
@@ -70,12 +71,14 @@ fun ShopListScreen(onMenuClick: () -> Unit, onNavigate: (String) -> Unit) {
 }
 
 @Composable
-fun ShopItemCard() {
+fun ShopItemCard(onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
     ) {
         Column {
             Image(
